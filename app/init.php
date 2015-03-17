@@ -12,6 +12,9 @@ require_once 'config/constant.php';
 //loading APP core
 require_once 'core/App.php';
 
+//loading Session class
+require_once 'core/Session.php';
+
 //loading Redirect class
 require_once 'core/Redirect.php';
 

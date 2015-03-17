@@ -10,5 +10,5 @@ define('__base_path__', dirname(dirname(dirname(__FILE__))) . DS);
 define('__app_path__', dirname(dirname(__FILE__)) . DS);
 
 // define the public path
-define('__public_path__', __base_path__ . dirname($_SERVER['PHP_SELF']) . DS);
+define('__public_path__', dirname($_SERVER['PHP_SELF']) . DS);
 

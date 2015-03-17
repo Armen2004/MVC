@@ -11,11 +11,20 @@ class Session {
     }
 
     public static function get($key){
-        return $_SESSION[$key];
+        if(isset($_SESSION[$key])) {
+            return $_SESSION[$key];
+        }
     }
 
-    public function destroy(){
-        session_destroy();
+    public static function all(){
+        return $_SESSION;
     }
+
+    public static function destroy(){
+//        unset($_SESSION);
+        session_destroy();
+//        session_unset();
+    }
+
 
 }

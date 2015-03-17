@@ -12,29 +12,36 @@ class App {
 
     public function __construct(){
         $url = $this->parsUrl();
-
-        if(isset($url[0])) {
-            if (file_exists(__app_path__.'controllers/' . ucwords($url[0]) . 'Controller.php')) {
-                $this->controller = ucwords($url[0]) . 'Controller';
-            } else {
-                require_once __app_path__.'controllers/ErrorController.php';
-                $controller = new ErrorController();
-                $controller->Error(404, ucwords($url[0]) . 'Controller.php');
-                return false;
+        if($url) {
+            if (isset($url[0])) {
+                if (file_exists(__app_path__ . 'controllers/' . ucwords($url[0]) . 'Controller.php')) {
+                    $this->controller = ucwords($url[0]) . 'Controller';
+                    $modelName = ucwords($url[0]);
+                    unset($url[0]);
+                } else {
+                    require_once __app_path__ . 'controllers/ErrorController.php';
+                    $controller = new ErrorController();
+                    $controller->Error(404, ucwords($url[0]) . 'Controller.php');
+                    return false;
+                }
             }
         }
 
         require_once __app_path__.'controllers/' . ucwords($this->controller) . '.php';
 
-        $this->controller = new $this->controller;
-        $data = $this->controller->loadModel(ucwords($url[0]));
-        if(!$data){
-            require_once __app_path__.'controllers/ErrorController.php';
-            $controller = new ErrorController();
-            $controller->Error(404, ucwords($url[0]) . '.php');
-            return false;
+        if(!isset($modelName)) {
+            $modelName = explode('Controller', ucwords($this->controller));
+            $modelName = $modelName[0];
         }
-        unset($url[0]);
+        $this->controller = new $this->controller;
+        $data = $this->controller->loadModel($modelName);
+        if (!$data) {
+                require_once __app_path__ . 'controllers/ErrorController.php';
+                $controller = new ErrorController();
+                $controller->Error(404, ucwords($url[0]) . '.php');
+                return false;
+            }
+
 
         if(isset($url[1])){
             if(method_exists($this->controller, $url[1])){
@@ -47,6 +54,8 @@ class App {
         }
 
         $this->params = $url ? array_values($url) : [];
+
+        Session::init();
 
         call_user_func_array([$this->controller, $this->method], $this->params);
     }
