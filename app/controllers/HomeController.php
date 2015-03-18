@@ -27,22 +27,30 @@ class HomeController extends Controller{
     }
 
     public function createTable(){
-        print_r($_POST);
-        print_r(unserialize($_POST['data']));
-//        $data = explode('&',$_POST['data']);
-//        $result = [];
-//        foreach($data as $key => $val){
-//            $a = explode('=', $val);
-//            if($a[0] == 'table_name'){
-//                $table_name = $a[1];
-//            }elseif($a[0] == 'database'){
-//                $database = $a[1];
-//            }else{
-//            }
-//            print_r($val);
-//        }
+        parse_str($_POST['data'], $data);
+        $count = $_POST['count'];
 //        print_r($data);
-//        $this->model->createNewTable();
+        $database = $data['database'];
+        $table_name = $data['table_name'];
+        $sql = "CREATE table $table_name ( ID INT( 11 ) AUTO_INCREMENT PRIMARY KEY,";
+        for($i = 0; $i < $count; $i++){
+            $field_names = "field_name_$i";
+            $field_name = $data[$field_names];
+            $field_types = 'field_type_' . $i;
+            $field_type = $data[$field_types];
+            $field_lengths = 'field_length_' . $i;
+            $field_length = $data[$field_lengths];
+//            if($field_length < 0){
+//                return false;
+//            }
+//            Prename VARCHAR( 50 ) NOT NULL,
+
+            $sql .= $field_name . " " . $field_type . "( " . $field_length . " ) NOT NULL,";
+        }
+        $sql = rtrim($sql, ",");
+        $sql .= ");";
+//        print_r($sql);
+        $this->model->createNewTable($database, $sql);
 //        echo json_decode(serialize($_POST));
     }
 

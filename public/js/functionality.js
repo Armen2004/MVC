@@ -74,7 +74,7 @@ $( document ).ready(function() {
                     '</div>' +
                     '<div class="col-lg-3">' +
                         '<div class="form-group">' +
-                            '<input type="text" name="field_length_' + x + '" class="form-control input" required placeholder="Field Length">' +
+                            '<input type="number" name="field_length_' + x + '" class="form-control input" required placeholder="Field Length">' +
                         '</div>' +
                     '</div>' +
                 '</div>');
@@ -102,7 +102,7 @@ $( document ).ready(function() {
                     '</div>' +
                     '<div class="col-lg-3">' +
                         '<div class="form-group">' +
-                            '<input type="text" name="field_length_' + x + '" class="form-control input" required placeholder="Field Length">' +
+                            '<input type="number" name="field_length_' + x + '" class="form-control input" required placeholder="Field Length">' +
                         '</div>' +
                     '</div>' +
                 '</div>');
@@ -114,25 +114,30 @@ $( document ).ready(function() {
     var tableField = $("#tableField");
     tableField.submit(function(e){
         e.preventDefault();
-       var data = new Array();
-       //var data = $(this).serialize();
+        var data = $(this).serialize();
         var url = $(this).attr('action');
-        var a = false;
+        var a = true;
         table.find(".input").each(function(){
             var value = $(this).val();
-            if(!value || value == 0){
-                $(this).parent("div").removeClass("has-success").addClass("has-error");
-                return false;
-            }else{
+            if(value && value != 0){
                 $(this).parent("div").removeClass("has-error").addClass("has-success");
+            }else{
+                $(this).parent("div").removeClass("has-success").addClass("has-error");
+                a = false
+
             }
-            data[$(this).attr('name')] = $(this).val();
-            console.log($(this).attr('name') + ' - ' + $(this).val())
+            //data[$(this).attr('name')] = $(this).val();
+            //console.log($(this).attr('name') + ' - ' + $(this).val())
         });
-        var count = table_form.children('div[data-id]');
+        if(!a){
+            return false;
+        }
+        console.log(a);
+        var count = table_form.children('div[data-id]').length;
         console.log(data);
-        //$.post(url, {data : data}, function (o) {
-        //    console.log(o)
+        //$.post(url, {data: data, count: count}, function (o) {
+        //    obj = JSON.parse(o);
+        //    alert(obj.success);
         //});
         return false;
     });
