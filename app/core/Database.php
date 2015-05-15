@@ -9,7 +9,6 @@ class Database extends PDO{
 
     public function __construct(){
         parent::__construct( "mysql:host={$this->dbhost}", $this->dbusername, $this->dbpassword );
-//        return $this->connectDB;
     }
 
 //    public function showDataBases(){

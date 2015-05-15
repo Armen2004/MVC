@@ -135,10 +135,10 @@ $( document ).ready(function() {
         console.log(a);
         var count = table_form.children('div[data-id]').length;
         console.log(data);
-        //$.post(url, {data: data, count: count}, function (o) {
-        //    obj = JSON.parse(o);
-        //    alert(obj.success);
-        //});
+        $.post(url, {data: data, count: count}, function (o) {
+            obj = JSON.parse(o);
+            alert(obj.success);
+        }, 'json');
         return false;
     });
 
