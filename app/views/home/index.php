@@ -9,7 +9,7 @@
     <hr>
 
     <div id="database">
-        <form method="post">
+        <form method="post" action="<?=__base_path__?>home/createDataBase" id="databaseField">
             <div class="input-group">
                 <input type="text" name="database" class="form-control" required placeholder="Data base name">
                 <span class="input-group-btn">
@@ -20,7 +20,7 @@
     </div>
 <hr>
     <div id="table" class="hidden">
-        <form method="post" action="<?=__public_path__?>home/createTable" id="tableField">
+        <form method="post" action="<?=__base_path__?>home/createTable" id="tableField">
             <div id="table_form">
                 <div class="row">
                     <div class="col-lg-12">

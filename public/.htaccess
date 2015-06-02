@@ -1,7 +1,7 @@
 Options -MultiViews
 RewriteEngine On
 
-RewriteBase /MVC/public/
+RewriteBase /
 
 # Handle Front Controller...
 RewriteCond %{REQUEST_FILENAME} !-d

@@ -7,5 +7,9 @@ class View {
         require_once __app_path__.'views/' . $view .'.php';
         require_once __app_path__.'views/layouts/footer.php';
     }
-
+    
+    public static function errorMake($view, $data=[]){
+        require_once __app_path__.'views/' . $view .'.php';
+    }
+    
 }

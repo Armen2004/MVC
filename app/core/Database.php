@@ -2,30 +2,10 @@
 
 class Database extends PDO{
 
-    public $dbhost = "localhost";
-    public $dbusername = "root";
-    public $dbpassword = "root";
     public $connectDB;
 
     public function __construct(){
-        parent::__construct( "mysql:host={$this->dbhost}", $this->dbusername, $this->dbpassword );
-    }
-
-//    public function showDataBases(){
-//        return $this->connectDB->query( 'SHOW DATABASES' )->fetchAll();
-//    }
-
-    public function createDB($dbName){
-        try {
-            $this->connectDB->exec("CREATE DATABASE `$dbName`;
-                CREATE USER '$this->dbusername'@'{$this->dbhost}' IDENTIFIED BY '$this->dbpassword';
-                GRANT ALL ON `$dbName`.* TO '$this->dbusername'@'{$this->dbhost}';
-                FLUSH PRIVILEGES;")
-            or die(print_r($this->connectDB->errorInfo(), true));
-
-        } catch (PDOException $e) {
-            die("DB ERROR: ". $e->getMessage());
-        }
+        parent::__construct( "mysql:host=".DB_HOST, DB_USER, DB_PASS );
     }
 
     public function createTable($dbname, $tableName, $params = []){

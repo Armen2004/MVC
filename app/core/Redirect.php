@@ -9,4 +9,10 @@ class Redirect {
         header('Location: ' . $path . '/' . $status . '/' . urldecode($message));
     }
 
+    public static function URL(){
+        if(isset($_GET['url'])){
+            return filter_var($_GET['url'], FILTER_SANITIZE_URL);
+        }
+    }
+
 }

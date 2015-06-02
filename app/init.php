@@ -1,10 +1,7 @@
 <?php
 
-////Composer autoload
-//require_once '../vendor/autoload.php';
-
 //database connection
-//require_once 'config/database.php';
+require_once 'config/database.php';
 
 //constants
 require_once 'config/constant.php';

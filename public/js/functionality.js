@@ -27,6 +27,7 @@ $( document ).ready(function() {
         var databaseName  = $(this).attr('data-db');
         if(table.hasClass('hidden')){
             table.removeClass('hidden');
+            field_types();
         }else{
             table.addClass('hidden');
         }
@@ -132,14 +133,46 @@ $( document ).ready(function() {
         if(!a){
             return false;
         }
-        console.log(a);
+//        console.log(a);
         var count = table_form.children('div[data-id]').length;
-        console.log(data);
-        $.post(url, {data: data, count: count}, function (o) {
-            obj = JSON.parse(o);
-            alert(obj.success);
-        }, 'json');
-        return false;
+//        console.log(data);
+//        console.log(url);
+        
+        $.post( url, { data: data, count: count })
+            .done(function( data ) {
+                obj = JSON.parse(data);
+                alert(obj.massage);
+            })
+            .fail(function() {
+                alert( "error" );
+            });
     });
+    
+    
 
+    
+    var databaseField = $("#databaseField");
+    databaseField.submit(function(e){
+        e.preventDefault();
+        var data = $(this).serialize();
+        var url = $(this).attr('action');
+        console.log(data);
+        console.log(url);
+        $.post( url, { data: data })
+            .done(function( data ) {
+                obj = JSON.parse(data);
+                alert(obj.massage);
+            })
+            .fail(function() {
+                alert( "error" );
+            });
+    });
 });
+
+    //get all field types
+function field_types(){
+    var field_type = $("select");
+    var field_name = field_type.attr('name');
+    var field_length = field_type.length;
+    console.log(field_length); 
+}
