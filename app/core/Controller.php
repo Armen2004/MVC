@@ -1,7 +1,7 @@
 <?php
 
 class Controller {
-//    protected $model;
+    protected $model;
 
     public function __construct(){
 

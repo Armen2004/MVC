@@ -26,9 +26,8 @@ class Home_Model extends Model {
         }
     }
 
-    public function showDBS(){
+    public function showDateBases(){
         return $this->db->query( 'SHOW DATABASES' )->fetchAll();
-//        print_r($data);
     }
 
     public function showTablesByDB($dbName){

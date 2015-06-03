@@ -12,7 +12,7 @@
         <script src="<?= __public_path__ ?>js/functionality.js"></script>
 
     </head>
-    <body>
+    <body style="background: #ffcccc">
         <div class="col-lg-offset-3 col-lg-6">
             <img src="<?= __public_path__ ?>img/404.png" class="img-responsive img-circle center-block">
             <h2 class="text-danger text-center">

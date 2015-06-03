@@ -34,8 +34,8 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Task Action <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li class="<?=$data['URL'] == 'task/createDataBase' ? 'active' : '' ?>"><a href="#">Create DataBase</a></li>
-                        <li class="<?=$data['URL'] == 'task/createTable' ? 'active' : '' ?>"><a href="#">Create Table</a></li>
+                        <li class="<?=$data['URL'] == 'task/createDataBase' ? 'active' : '' ?>"><a href="<?=__base_path__?>task/createDataBase">Create DataBase</a></li>
+                        <li class="<?=$data['URL'] == 'task/createTable' ? 'active' : '' ?>"><a href="<?=__base_path__?>task/createTable">Create Table</a></li>
                         <li><a href="#">Something else here</a></li>
                         <li class="divider"></li>
                         <li><a href="#">Separated link</a></li>

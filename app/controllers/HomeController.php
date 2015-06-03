@@ -9,7 +9,7 @@ class HomeController extends Controller{
         $this->url = Redirect::URL();
     }
     public function index(){
-        $dbNames = $this->model->showDBS();
+        $dbNames = $this->model->showDateBases();
         $dbs = [];
         $arr = ['information_schema', 'performance_schema', 'mysql', 'phpmyadmin'];
         foreach($dbNames as $key=>$val){

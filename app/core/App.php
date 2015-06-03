@@ -4,7 +4,7 @@ class App {
 
     protected $controller = 'HomeController';
     protected $method = 'index';
-    protected $model = 'User';
+    protected $model = 'Home';
     protected $params = [];
 
     public function __construct() {
@@ -31,7 +31,7 @@ class App {
         $this->controller = new $this->controller;
         $data = $this->controller->loadModel($modelName);
         if (!$data) {
-            $this->errorHendler(404, ucwords($url[0]) . ' model');
+            $this->errorHendler(404, $modelName . ' model');
             return false;
         }
 
