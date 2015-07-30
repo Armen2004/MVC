@@ -14,7 +14,17 @@
     </head>
     <body style="background: #ffcccc">
         <div class="col-lg-offset-3 col-lg-6">
-            <img src="<?= __public_path__ ?>img/404.png" class="img-responsive img-circle center-block">
+            <?php
+            if(isset($data['status'])) {
+            ?>
+                <img src="<?= __public_path__ ?>img/404.png" class="img-responsive img-circle center-block">
+            <?php
+            }else{
+            ?>
+                <img src="<?= __public_path__ ?>img/syntaxError.png" class="img-responsive img-circle center-block">
+            <?php
+            }
+            ?>
             <h2 class="text-danger text-center">
                 <?= $data['massage'] ?>
             </h2>

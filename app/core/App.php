@@ -16,7 +16,7 @@ class App {
                     $modelName = ucwords($url[0]);
                     unset($url[0]);
                 } else {
-                    $this->errorHendler(404, ucwords($url[0]) . 'Controller.php');
+                    $this->errorHandler(404, ucwords($url[0]) . 'Controller.php');
                     return false;
                 }
             }
@@ -31,7 +31,7 @@ class App {
         $this->controller = new $this->controller;
         $data = $this->controller->loadModel($modelName);
         if (!$data) {
-            $this->errorHendler(404, $modelName . ' model');
+            $this->errorHandler(404, $modelName . ' model');
             return false;
         }
 
@@ -41,7 +41,7 @@ class App {
                 $this->method = $url[1];
                 unset($url[1]);
             } else {
-                $this->errorHendler(404, $url[1] . ' action');
+                $this->errorHandler(404, $url[1] . ' action');
                 return false;
             }
         }
@@ -59,7 +59,7 @@ class App {
         }
     }
 
-    public function errorHendler($code = 404, $massage) {
+    public function errorHandler($code = 404, $massage) {
         require_once __app_path__ . 'controllers/ErrorController.php';
         $controller = new ErrorController();
         $controller->Error($code, $massage);

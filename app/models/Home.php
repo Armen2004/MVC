@@ -26,8 +26,8 @@ class Home_Model extends Model {
         }
     }
 
-    public function createNewTable($database, $sql){
-        $this->db->query("use {$database}" );
+    public function createNewTable($sql){
+        $this->db->query("use {DB_DATABASE}" );
         try {
             $this->db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );//Error Handling
             $this->db->exec($sql);
