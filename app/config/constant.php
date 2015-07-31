@@ -14,6 +14,9 @@ if($_SERVER['SERVER_NAME'] == 'localhost'){
     
     // define the public path
     define('__public_path__', dirname($_SERVER['PHP_SELF']) . DS);
+
+    // define the file path
+    define('__file_path__', $_SERVER['DOCUMENT_ROOT'] . __public_path__);
     
 }else{
         
@@ -25,6 +28,9 @@ if($_SERVER['SERVER_NAME'] == 'localhost'){
 
     // define the public path
     define('__public_path__', DS);
+
+    // define the file path
+    define('__file_path__', $_SERVER['DOCUMENT_ROOT'] . __public_path__);
 }
 
 define('LOGIN_SALT', "!4Q45$@A#2ED%c6^G2&1h27*Y3(B48)4?h_s4T0+9Bgt");

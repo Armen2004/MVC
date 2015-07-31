@@ -10,3 +10,6 @@ require_once 'config/constant.php';
 function __autoload($class){
     require_once "core/{$class}.php";
 }
+
+//STARTING SESSION
+Session::init();

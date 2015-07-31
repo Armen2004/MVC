@@ -47,60 +47,98 @@ class Home_Model extends Model {
     }
 
     public function insertDataIntoTable(array $data) {
-        $keys = "";
-        $vals = "";
-        foreach ($data as $key => $val) {
-            $keys .= htmlentities(stripslashes($key)) . ", ";
-            $vals .= "'" . htmlentities(stripslashes($val)) . "', ";
-        }
-        $keys = rtrim($keys, " ,");
-        $vals = rtrim($vals, " ,");
-        $sql = "INSERT INTO contacts (" . $keys . ") VALUES (" . $vals . ")";
-        try {
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
-            $this->db->exec($sql);
-            $data = [
-                'status' => TRUE,
-                'massage' => 'Data Inserted Successfully.'
-            ];
-            return $data;
-        } catch (PDOException $e) {
-            $data = [
-                'status' => FALSE,
-                'massage' => $e->getMessage()
-            ];
-            return $data;
+        if(!Session::get('max_row_count')) {
+            $keys = "";
+            $vals = "";
+            foreach ($data as $key => $val) {
+                $keys .= htmlentities(stripslashes($key)) . ", ";
+                $vals .= "'" . htmlentities(stripslashes($val)) . "', ";
+            }
+            $keys = rtrim($keys, " ,");
+            $vals = rtrim($vals, " ,");
+            $sql = "INSERT INTO contacts (" . $keys . ") VALUES (" . $vals . ")";
+            try {
+                $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
+                $this->db->exec($sql);
+                $data = [
+                    'status' => TRUE,
+                    'massage' => 'Data Inserted Successfully.'
+                ];
+                return $data;
+            } catch (PDOException $e) {
+                $data = [
+                    'status' => FALSE,
+                    'massage' => $e->getMessage()
+                ];
+                return $data;
+            }
         }
     }
 
-    public function insertDataIntoTableNew(array $data, $id) {
-        foreach ($data as $key => $val) {
-            foreach ($val as $key1 => $val1) {
-                switch ($key) {
-                    case "phoneNumbers":
-                        $sql = "INSERT INTO " . $key . " (uuid, numbers) VALUES ('" . $id . "', " . $val1 . "')";
-                        break;
-                    case "emails":
-                        $sql = "INSERT INTO " . $key . " (uuid, uuid, emails) VALUES ('" . $id . "', " . $val1 . "')";
-                        break;
-                    default:
-                        return;
+    public function insertDataIntoTableArray(array $data, $id) {
+        if(!Session::get('max_row_count')) {
+            $sql = "";
+            foreach ($data as $key => $val) {
+                foreach ($val as $key1 => $val1) {
+                    switch (strtolower($key)) {
+                        case "phonenumbers":
+                            $sql .= "INSERT INTO " . strtolower($key) . " (uuid, numbers) VALUES ('" . htmlentities(stripslashes($id)) . "', '" . htmlentities(stripslashes($val1)) . "'); ";
+                            break;
+                        case "emails":
+                            $sql .= "INSERT INTO " . strtolower($key) . " (uuid, emails) VALUES ('" . htmlentities(stripslashes($id)) . "', '" . htmlentities(stripslashes($val1)) . "'); ";
+                            break;
+                    }
                 }
-                try {
-                    $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
-                    $this->db->exec($sql);
-                    $data = [
-                        'status' => TRUE,
-                        'massage' => 'Data Inserted Successfully.'
-                    ];
-                    return $data;
-                } catch (PDOException $e) {
-                    $data = [
-                        'status' => FALSE,
-                        'massage' => $e->getMessage()
-                    ];
-                    return $data;
+            }
+            try {
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
+            $this->db->exec($sql);
+                $data = [
+                    'status' => TRUE,
+                    'massage' => 'Data Inserted Successfully.'
+                ];
+                return $data;
+            } catch (PDOException $e) {
+                echo $e->getMessage();
+                $data = [
+                    'status' => FALSE,
+                    'massage' => $e->getMessage()
+                ];
+                return $data;
+            }
+        }
+    }
+
+    public function insertDataIntoTableNewArray(array $data, $id) {
+        if(!Session::get('max_row_count')) {
+            $keys = "";
+            $vals = "";
+            foreach ($data as $key => $val) {
+                $tableName = $key;
+                foreach ($val as $key1 => $val1) {
+                    $keys .= htmlentities(stripslashes($key1)) . ", ";
+                    $vals .= "'" . htmlentities(stripslashes($val1)) . "', ";
                 }
+            }
+            $keys = rtrim($keys, " ,");
+            $vals = rtrim($vals, " ,");
+            $sql = "INSERT INTO " . $tableName . " (uuid, " . $keys . ") VALUES ('" . $id . "', " . $vals . "); ";
+//print_r($sql);die;
+            try {
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
+            $this->db->exec($sql);
+                $data = [
+                    'status' => TRUE,
+                    'massage' => 'Data Inserted Successfully.'
+                ];
+                return $data;
+            } catch (PDOException $e) {
+                echo $e->getMessage();
+                $data = [
+                    'status' => FALSE,
+                    'massage' => $e->getMessage()
+                ];
+                return $data;
             }
         }
     }

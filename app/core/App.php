@@ -13,7 +13,6 @@ class App {
         //CHECK IF CONTROLLER EXISTS, IF NOT REQUIRING DEFAULT CONTROLLER
         if ($url) {
             if (isset($url[0])) {
-                echo url[0];
                 if (file_exists(__app_path__ . 'controllers/' . ucwords($url[0]) . 'Controller.php')) {
                     $this->controller = ucwords($url[0]) . 'Controller';
                     unset($url[0]);
@@ -41,10 +40,7 @@ class App {
         
         //CHANGING INDEXES TO START FROM 0 IF URL EXISTS
         $this->params = $url ? array_values($url) : [];
-        
-        //STARTING SESSION
-        Session::init();
-        
+
         //CALLING THE FUNCTION BASED ON URL ELEMENTS (CONTROLLER,METHOD,PARAMS)
         call_user_func_array([$this->controller, $this->method], $this->params);
     }

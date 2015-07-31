@@ -32,48 +32,39 @@ class HomeController extends Controller {
                 $this->myFirstArrayFields($value, $kay);
             }
         }
-
-//        foreach ($data as $kay => $value) {
-////            print_r($data);
-//            if (is_array($value)) {
-////                print_r($value);
-////                echo "<br>";
-//                $this->myFirstArrayFields($value, $dbTable);
-//            } else {
-//                $array['dbTable'] = $dbTable;
-//                $array[$kay] = $value;
-//            }
-//        }
-////        print_r($value);
-////        echo "<br>";
-//        print_r($array);
-////        return $array;
     }
 
     public function JSONLogic() {
         if ($results = $this->readFromJSON()) {
+            $i = 1;
             echo "<pre>";
+
             foreach ($results as $kay => $val) {
                 $data['uuid'] = $val['uuid'];
                 $data['photo'] = $val['photo'];
                 $data['name'] = $val['name'];
                 $data['lastName'] = $val['lastName'];
                 $data['description'] = $val['description'];
-                $query = $this->model->insertDataIntoTable($data);
                 $id = $val['uuid'];
-                $datas['phoneNumbers'] = $val['phoneNumbers'];
-                $datas['emails'] = $val['emails'];
-                $query = $this->model->insertDataIntoTableNew($datas, $id);
-//                print_r($val['phoneNumbers']);
-//                $val['phoneNumbers'];
-//                print_r($val['emails']);
-//                $val['addersses'];
+                $array['phoneNumbers'] = $val['phoneNumbers'];
+                $array['emails'] = $val['emails'];
+                $this->model->insertDataIntoTable($data);
+                $this->model->insertDataIntoTableArray($array, $id);
+                foreach($val['addersses'] as $key => $val){
+                    $newArray['addersses'] = $val;
+                    $this->model->insertDataIntoTableNewArray($newArray, $id);
+                }
+                if(count($results) == $i) {
+                    Session::set('max_row_count', true);
+                }
+                $i++;
+
             }
         }
     }
 
     public function readFromJSON() {
-        $contents = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/files/contacts.json");
+        $contents = file_get_contents(__file_path__ . "/files/contacts.json");
         $contents = utf8_encode($contents);
         $latitude = preg_replace('/"latitude":(\s*)(-?)(\s*)([0-9]{1,})(\.[0-9]{1,})?/', '"latitude":"$2$4$5"', $contents);
         $longitude = preg_replace('/"longitude":(\s*)(-?)(\s*)([0-9]{1,})(\.[0-9]{1,})?/', '"longitude":"$2$4$5"', $latitude);
