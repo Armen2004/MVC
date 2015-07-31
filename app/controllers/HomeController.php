@@ -3,12 +3,17 @@
 class HomeController extends Controller {
 
     public $url;
+    public $model;
 
     public function __construct() {
-        parent::__construct();
+        $this->model = $this->loadModel('Home');
         $this->url = Redirect::URL();
-//        $this->createDataBase();
-        $this->createTables();
+        if (!$this->createDataBase()) {
+            $this->createDataBase();
+        }
+        if (!$this->createDBTables()) {
+            $this->createDBTables();
+        }
         $this->JSONLogic();
     }
 
@@ -16,60 +21,59 @@ class HomeController extends Controller {
 //        View::make('home/index', $data);
     }
 
-    public function myFirstArrayFields(array $data, $dbTable){
-//        $array = [];
-        $i = 0;
-        foreach($data as $kay => $value){
-//            print_r($data);
-            if(is_array($value)){
-                echo ++$i;
-//                print_r($value);
-//                echo "<br>";
+    public function myFirstArrayFields($data, $key = NULL) {
+        if (!is_array($data)) {
+            $array['dbTable'] = $key;
+            $array[$key] = $data;
+            print_r($array);
+            return;
+        } else {
+            foreach ($data as $kay => $value) {
+                $this->myFirstArrayFields($value, $kay);
+            }
+        }
+
+//        foreach ($data as $kay => $value) {
+////            print_r($data);
+//            if (is_array($value)) {
+////                print_r($value);
+////                echo "<br>";
 //                $this->myFirstArrayFields($value, $dbTable);
-            }else {
-                $array['dbTable'] = $dbTable;
-                $array[$kay] = $value;
-            }
-        }
-        print_r($data);
+//            } else {
+//                $array['dbTable'] = $dbTable;
+//                $array[$kay] = $value;
+//            }
+//        }
+////        print_r($value);
+////        echo "<br>";
 //        print_r($array);
-//        return $array;
+////        return $array;
     }
 
-    public function JSONLogic(){
-        if($results = $this->readFromJSON()) {
+    public function JSONLogic() {
+        if ($results = $this->readFromJSON()) {
             echo "<pre>";
-//        print_r($results);
-//        die;
-            $data1 = [];
-            $data2 = [];
-            $array1 = [];
-            $array2 = [];
-            $array3 = [];
             foreach ($results as $kay => $val) {
-                foreach ($val as $k => $v) {
-                    if (is_array($v)) {
-//                    print_r($k);
-//                    echo "<br>";
-                        $this->myFirstArrayFields($v, $k);
-                    } else {
-                        $data1['dbTable'] = 'contacts';
-                        $array1[$k] = $v;
-                    }
-                }
-                array_push($data2, $array2);
-                array_push($data1, $array1);
-//            echo $key['uuid'];
-//                    echo "<br>";
+                $data['uuid'] = $val['uuid'];
+                $data['photo'] = $val['photo'];
+                $data['name'] = $val['name'];
+                $data['lastName'] = $val['lastName'];
+                $data['description'] = $val['description'];
+                $query = $this->model->insertDataIntoTable($data);
+                $id = $val['uuid'];
+                $datas['phoneNumbers'] = $val['phoneNumbers'];
+                $datas['emails'] = $val['emails'];
+                $query = $this->model->insertDataIntoTableNew($datas, $id);
+//                print_r($val['phoneNumbers']);
+//                $val['phoneNumbers'];
+//                print_r($val['emails']);
+//                $val['addersses'];
             }
-//        print_r($data2);
-            $this->createContactsTable($array1, $data1['dbTable']);
-            print_r($array1);
         }
     }
 
-    public function readFromJSON(){
-        $contents = file_get_contents($_SERVER['DOCUMENT_ROOT']. "/MVC/public/files/contacts.json");
+    public function readFromJSON() {
+        $contents = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/files/contacts.json");
         $contents = utf8_encode($contents);
         $latitude = preg_replace('/"latitude":(\s*)(-?)(\s*)([0-9]{1,})(\.[0-9]{1,})?/', '"latitude":"$2$4$5"', $contents);
         $longitude = preg_replace('/"longitude":(\s*)(-?)(\s*)([0-9]{1,})(\.[0-9]{1,})?/', '"longitude":"$2$4$5"', $latitude);
@@ -81,7 +85,7 @@ class HomeController extends Controller {
             JSON_ERROR_CTRL_CHAR => 'Control character error, possibly incorrectly encoded',
             JSON_ERROR_SYNTAX => 'Syntax error',
         );
-        if($json_errors[json_last_error()] != $json_errors[JSON_ERROR_NONE]){
+        if ($json_errors[json_last_error()] != $json_errors[JSON_ERROR_NONE]) {
             require_once __app_path__ . 'controllers/ErrorController.php';
             $controller = new ErrorController();
             $controller->SyntaxError($json_errors[json_last_error()]);
@@ -93,58 +97,48 @@ class HomeController extends Controller {
     public function createDataBase() {
         $query = $this->model->createNewDatabase(DB_DATABASE);
         if ($query['status']) {
-            json_encode(['massage' => 'Database Created Successfully.']);
+            return $query;
         } else {
-            json_encode(['massage' => $query['massage']]);
+            echo $query['massage'];
         }
     }
 
-    public function createContactsTable() {
-        $sql ="
-CREATE TABLE IF NOT EXISTS `contacts` (
-  `uuid` varchar(100) NOT NULL,
-  `photo` varchar(255) NOT NULL,
-  `firstName` varchar(100) NOT NULL,
-  `lastName` varchar(100) NOT NULL,
-  `description` text NOT NULL,
-  PRIMARY KEY (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-          CREATE table IF NOT EXISTS `contacts` (
-                id int( 11 ) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    public function createDBTables() {
+        $sql = "CREATE TABLE IF NOT EXISTS `contacts` (
                 `uuid` varchar(100) NOT NULL,
-                `photo` varchar(200),
-                `firstName` varchar(100),
-                `lastName` varchar(100),
-                `description` TEXT
-            ) CHARACTER SET utf8 COLLATE utf8_general_ci;";
+                `photo` varchar(100) DEFAULT NULL,
+                `name` varchar(100) DEFAULT NULL,
+                `lastName` varchar(100) DEFAULT NULL,
+                `description` text
+                ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; ";
+        $sql .= "CREATE TABLE IF NOT EXISTS `phonenumbers` (
+                `uuid` varchar(100) DEFAULT NULL,
+                `numbers` varchar(100) DEFAULT NULL
+                ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; ";
+        $sql .= "CREATE table IF NOT EXISTS `emails` (
+                `uuid` varchar(100) NOT NULL,
+                `emails` varchar(100)
+                ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; ";
+        $sql .= "CREATE table IF NOT EXISTS `addersses` (
+                `uuid` varchar(100) NOT NULL,
+                `name` varchar(100),
+                `city` varchar(100),
+                `latitude` varchar(100),
+                `longitude` varchar(100)
+                ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; ";
+        $sql .= "ALTER TABLE `contacts`  ADD PRIMARY KEY (`uuid`); ";
+        $sql .= "ALTER TABLE `phonenumbers`  ADD KEY `uuid` (`uuid`); ";
+        $sql .= "ALTER TABLE `emails`  ADD KEY `uuid` (`uuid`); ";
+        $sql .= "ALTER TABLE `addersses`  ADD KEY `uuid` (`uuid`); ";
+        $sql .= "ALTER TABLE `phonenumbers` ADD CONSTRAINT `phonenumbers_ibfk_1` FOREIGN KEY (`uuid`) REFERENCES `contacts` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE; ";
+        $sql .= "ALTER TABLE `emails` ADD CONSTRAINT `emails_ibfk_1` FOREIGN KEY (`uuid`) REFERENCES `contacts` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE; ";
+        $sql .= "ALTER TABLE `addersses` ADD CONSTRAINT `addersses_ibfk_1` FOREIGN KEY (`uuid`) REFERENCES `contacts` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE;";
         $query = $this->model->createNewTable($sql);
         if ($query['status']) {
-            json_encode(['massage' => 'Database Created Successfully.']);
+            return $query;
         } else {
-            json_encode(['massage' => $query['massage']]);
+            echo $query['massage'];
         }
-    }
-
-    public function createPhoneNumbersTable() {
-        $sql =
-            "CREATE table IF NOT EXISTS `phonenumbers` (
-                id INT( 11 ) AUTO_INCREMENT PRIMARY KEY NOT NULL,
-                `uuid` varchar(100) NOT NULL,
-                `photo` varchar(200),
-                `firstName` varchar(100),
-                `lastName` varchar(100),
-                `description` TEXT
-            ) CHARACTER SET utf8 COLLATE utf8_general_ci;";
-        $query = $this->model->createNewTable($sql);
-        if ($query['status']) {
-            json_encode(['massage' => 'Database Created Successfully.']);
-        } else {
-            json_encode(['massage' => $query['massage']]);
-        }
-    }
-
-    public function createTables(){
-        $this->createContactsTable();
     }
 
 }
