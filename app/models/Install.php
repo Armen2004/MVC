@@ -1,6 +1,6 @@
 <?php
 
-class Home_Model extends Model {
+class Install_Model extends Model {
 
     public function __construct() {
         parent::__construct();
@@ -12,11 +12,7 @@ class Home_Model extends Model {
                 CREATE USER '{DB_USER}'@'{DB_HOST}' IDENTIFIED BY '{DB_PASS}';
                 GRANT ALL ON `$dbName`.* TO '{DB_USER}'@'{DB_HOST}';
                 FLUSH PRIVILEGES;") or die(print_r($this->db->errorInfo(), true));
-            $data = [
-                'status' => TRUE,
-                'massage' => 'Database Created Successfully.'
-            ];
-            return $data;
+                Session::set('massage-db', 'Database Created Successfully.');
         } catch (PDOException $e) {
             $data = [
                 'status' => FALSE,
@@ -31,13 +27,10 @@ class Home_Model extends Model {
         try {
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
             $this->db->exec($sql);
-            $data = [
-                'status' => TRUE,
-                'massage' => 'Table Created Successfully.'
-            ];
-            return $data;
+            Session::set('massage-table', 'Table Created Successfully.');
         } catch (PDOException $e) {
 //            echo $e->getMessage();//Remove or change message in production code
+
             $data = [
                 'status' => FALSE,
                 'massage' => $e->getMessage()
@@ -123,7 +116,6 @@ class Home_Model extends Model {
             $keys = rtrim($keys, " ,");
             $vals = rtrim($vals, " ,");
             $sql = "INSERT INTO " . $tableName . " (uuid, " . $keys . ") VALUES ('" . $id . "', " . $vals . "); ";
-//print_r($sql);die;
             try {
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
             $this->db->exec($sql);

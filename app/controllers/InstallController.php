@@ -1,13 +1,11 @@
 <?php
 
-class HomeController extends Controller {
+class InstallController extends Controller {
 
-    public $url;
     public $model;
 
     public function __construct() {
-        $this->model = $this->loadModel('Home');
-        $this->url = Redirect::URL();
+        $this->model = $this->loadModel('Install');
         if (!$this->createDataBase()) {
             $this->createDataBase();
         }
@@ -18,27 +16,12 @@ class HomeController extends Controller {
     }
 
     public function index() {
-//        View::make('home/index', $data);
-    }
-
-    public function myFirstArrayFields($data, $key = NULL) {
-        if (!is_array($data)) {
-            $array['dbTable'] = $key;
-            $array[$key] = $data;
-            print_r($array);
-            return;
-        } else {
-            foreach ($data as $kay => $value) {
-                $this->myFirstArrayFields($value, $kay);
-            }
-        }
+        View::installMake('install/index');
     }
 
     public function JSONLogic() {
         if ($results = $this->readFromJSON()) {
             $i = 1;
-            echo "<pre>";
-
             foreach ($results as $kay => $val) {
                 $data['uuid'] = $val['uuid'];
                 $data['photo'] = $val['photo'];
@@ -87,10 +70,10 @@ class HomeController extends Controller {
 
     public function createDataBase() {
         $query = $this->model->createNewDatabase(DB_DATABASE);
-        if ($query['status']) {
-            return $query;
+        if (Session::get('massage-db')) {
+            return true;
         } else {
-            echo $query['massage'];
+            Session::set('error-massage-table', $query['massage']);
         }
     }
 
@@ -103,19 +86,19 @@ class HomeController extends Controller {
                 `description` text
                 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; ";
         $sql .= "CREATE TABLE IF NOT EXISTS `phonenumbers` (
-                `uuid` varchar(100) DEFAULT NULL,
+                `uuid` varchar(100) NOT NULL,
                 `numbers` varchar(100) DEFAULT NULL
                 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; ";
         $sql .= "CREATE table IF NOT EXISTS `emails` (
                 `uuid` varchar(100) NOT NULL,
-                `emails` varchar(100)
+                `emails` varchar(100) DEFAULT NULL
                 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; ";
         $sql .= "CREATE table IF NOT EXISTS `addersses` (
                 `uuid` varchar(100) NOT NULL,
-                `name` varchar(100),
-                `city` varchar(100),
-                `latitude` varchar(100),
-                `longitude` varchar(100)
+                `name` varchar(100) DEFAULT NULL,
+                `city` varchar(100) DEFAULT NULL,
+                `latitude` varchar(100) DEFAULT NULL,
+                `longitude` varchar(100) DEFAULT NULL
                 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; ";
         $sql .= "ALTER TABLE `contacts`  ADD PRIMARY KEY (`uuid`); ";
         $sql .= "ALTER TABLE `phonenumbers`  ADD KEY `uuid` (`uuid`); ";
@@ -125,11 +108,15 @@ class HomeController extends Controller {
         $sql .= "ALTER TABLE `emails` ADD CONSTRAINT `emails_ibfk_1` FOREIGN KEY (`uuid`) REFERENCES `contacts` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE; ";
         $sql .= "ALTER TABLE `addersses` ADD CONSTRAINT `addersses_ibfk_1` FOREIGN KEY (`uuid`) REFERENCES `contacts` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE;";
         $query = $this->model->createNewTable($sql);
-        if ($query['status']) {
-            return $query;
+        if (Session::get('massage-db')) {
+            return true;
         } else {
-            echo $query['massage'];
+            Session::set('error-massage-db', $query['massage']);
         }
+    }
+
+    public function __destruct(){
+
     }
 
 }

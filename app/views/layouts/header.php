@@ -2,9 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Test</title>
+    <title><?=Session::get('site-title')?></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" type="image/png" href="<?=__public_path__?>img/Armen.png">
     <link rel="stylesheet" href="<?=__public_path__?>css/bootstrap.css">
     <link rel="stylesheet" href="<?=__public_path__?>css/bootstrap-theme.css">
     <script src="<?=__public_path__?>js/jquery.js"></script>
@@ -29,21 +30,9 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="<?=(($data['URL'] == 'home/index' || $data['URL'] == '') ? 'active' : '') ?>"><a href="<?=__base_path__?>home/index"><span></span>Home</a></li>
-                <li class="<?=$data['URL'] == 'home/about' ? 'active' : '' ?>"><a href="<?=__base_path__?>home/about">About</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Task Action <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li class="<?=$data['URL'] == 'task/createDataBase' ? 'active' : '' ?>"><a href="<?=__base_path__?>task/createDataBase">Create DataBase</a></li>
-                        <li class="<?=$data['URL'] == 'task/createTable' ? 'active' : '' ?>"><a href="<?=__base_path__?>task/createTable">Create Table</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">One more separated link</a></li>
-                    </ul>
-                </li>
-                <li class="<?=$data['URL'] == 'home/contacts' ? 'active' : '' ?>"><a href="<?=__base_path__?>home/contacts">Contacts</a></li>
+                <li class="<?=(($data['URL'] == 'index/index' || $data['URL'] == '') ? 'active' : '') ?>"><a href="<?=__base_path__?>index/index"><span></span>Home</a></li>
+                <li class="<?=$data['URL'] == 'index/createContact' ? 'active' : '' ?>"><a href="<?=__base_path__?>index/createContact">Create Contact</a></li>
+                <li class="<?=$data['URL'] == 'index/search' ? 'active' : '' ?>"><a href="<?=__base_path__?>index/search">Search</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

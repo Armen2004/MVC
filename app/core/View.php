@@ -11,5 +11,8 @@ class View {
     public static function errorMake($view, $data=[]){
         require_once __app_path__.'views/' . $view .'.php';
     }
-    
+
+    public static function installMake($view, $data=[]){
+        require_once __app_path__.'views/' . $view .'.php';
+    }
 }

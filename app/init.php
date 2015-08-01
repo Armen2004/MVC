@@ -13,3 +13,5 @@ function __autoload($class){
 
 //STARTING SESSION
 Session::init();
+
+Session::set('site-title', 'Test App For Helix');

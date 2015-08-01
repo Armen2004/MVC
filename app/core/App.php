@@ -2,7 +2,7 @@
 
 class App {
 
-    protected $controller = 'HomeController';//DEFAULT CONTROLLER
+    protected $controller = 'IndexController';//DEFAULT CONTROLLER
     protected $method = 'index';//DEFAULT METHOD
     protected $params = [];//PARAMETERS ARE NOT SET BY DEFAULT
 

@@ -9,8 +9,8 @@ class Controller {
         return new $modelName();
     }
 
-    //LOAD VIEW
-    protected function view($view,$data=[]){
-        require_once '../app/views/'.$view.'.php';
+    protected function getParams(){
+        return $this->params = Redirect::parsUrl() ? array_values(Redirect::parsUrl()) : [];
     }
+
 }
