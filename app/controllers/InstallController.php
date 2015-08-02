@@ -79,34 +79,45 @@ class InstallController extends Controller {
 
     public function createDBTables() {
         $sql = "CREATE TABLE IF NOT EXISTS `contacts` (
-                `uuid` varchar(100) NOT NULL,
-                `photo` varchar(100) DEFAULT NULL,
-                `name` varchar(100) DEFAULT NULL,
-                `lastName` varchar(100) DEFAULT NULL,
-                `description` text
-                ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; ";
-        $sql .= "CREATE TABLE IF NOT EXISTS `phonenumbers` (
-                `uuid` varchar(100) NOT NULL,
-                `numbers` varchar(100) DEFAULT NULL
-                ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; ";
-        $sql .= "CREATE table IF NOT EXISTS `emails` (
-                `uuid` varchar(100) NOT NULL,
-                `emails` varchar(100) DEFAULT NULL
-                ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; ";
-        $sql .= "CREATE table IF NOT EXISTS `addersses` (
-                `uuid` varchar(100) NOT NULL,
-                `name` varchar(100) DEFAULT NULL,
-                `city` varchar(100) DEFAULT NULL,
-                `latitude` varchar(100) DEFAULT NULL,
-                `longitude` varchar(100) DEFAULT NULL
-                ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; ";
-        $sql .= "ALTER TABLE `contacts`  ADD PRIMARY KEY (`uuid`); ";
-        $sql .= "ALTER TABLE `phonenumbers`  ADD KEY `uuid` (`uuid`); ";
-        $sql .= "ALTER TABLE `emails`  ADD KEY `uuid` (`uuid`); ";
-        $sql .= "ALTER TABLE `addersses`  ADD KEY `uuid` (`uuid`); ";
-        $sql .= "ALTER TABLE `phonenumbers` ADD CONSTRAINT `phonenumbers_ibfk_1` FOREIGN KEY (`uuid`) REFERENCES `contacts` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE; ";
+                `id` int(11) NOT NULL,
+                  `uuid` varchar(100) NOT NULL,
+                  `photo` varchar(100) NOT NULL,
+                  `name` varchar(100) NOT NULL,
+                  `lastName` varchar(100) NOT NULL,
+                  `description` text NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8; ";
+            $sql .= "CREATE TABLE IF NOT EXISTS `phonenumbers` (
+                    `id` int(11) NOT NULL,
+                      `uuid` varchar(100) NOT NULL,
+                      `numbers` varchar(100) NOT NULL
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8; ";
+        $sql .= "CREATE TABLE IF NOT EXISTS `emails` (
+                    `id` int(11) NOT NULL,
+                      `uuid` varchar(100) NOT NULL,
+                      `emails` varchar(100) NOT NULL
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8; ";
+        $sql .= "CREATE TABLE IF NOT EXISTS `addersses` (
+                    `id` int(11) NOT NULL,
+                      `uuid` varchar(100) NOT NULL,
+                      `name` varchar(100) NOT NULL,
+                      `city` varchar(100) NOT NULL,
+                      `latitude` varchar(100) NOT NULL,
+                      `longitude` varchar(100) NOT NULL
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8; ";
+        $sql .= "ALTER TABLE `contacts` ADD PRIMARY KEY (`id`), ADD KEY `uuid` (`uuid`); ";
+        $sql .= "ALTER TABLE `phonenumbers` ADD PRIMARY KEY (`id`), ADD KEY `uuid` (`uuid`); ";
+        $sql .= "ALTER TABLE `emails` ADD PRIMARY KEY (`id`), ADD KEY `uuid` (`uuid`); ";
+        $sql .= "ALTER TABLE `addersses` ADD PRIMARY KEY (`id`), ADD KEY `uuid` (`uuid`); ";
+
+        $sql .= "ALTER TABLE `contacts` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT; ";
+        $sql .= "ALTER TABLE `phonenumbers` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT; ";
+        $sql .= "ALTER TABLE `emails` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT; ";
+        $sql .= "ALTER TABLE `addersses` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT; ";
+
+        $sql .= "ALTER TABLE `addersses` ADD CONSTRAINT `addersses_ibfk_1` FOREIGN KEY (`uuid`) REFERENCES `contacts` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE; ";
         $sql .= "ALTER TABLE `emails` ADD CONSTRAINT `emails_ibfk_1` FOREIGN KEY (`uuid`) REFERENCES `contacts` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE; ";
-        $sql .= "ALTER TABLE `addersses` ADD CONSTRAINT `addersses_ibfk_1` FOREIGN KEY (`uuid`) REFERENCES `contacts` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE;";
+        $sql .= "ALTER TABLE `phonenumbers` ADD CONSTRAINT `phonenumbers_ibfk_1` FOREIGN KEY (`uuid`) REFERENCES `contacts` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE; ";
+
         $query = $this->model->createNewTable($sql);
         if (Session::get('massage-db')) {
             return true;

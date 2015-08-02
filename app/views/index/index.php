@@ -10,7 +10,6 @@
             <th>lastName</th>
             <th>photo</th>
             <th>description</th>
-            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -19,15 +18,11 @@
             ?>
 
             <tr>
-                <td><a href="<?=__base_path__?>index/index/<?= $value['uuid'] ?>"><?= $value['uuid'] ?></a></td>
-                <td><?= $value['name'] ?></td>
-                <td><?= $value['lastName'] ?></td>
-                <td><?= $value['photo'] ?></td>
-                <td><?= $value['description'] ?></td>
-                <td width="110px">
-                    <a href="" class="btn btn-warning btn-xs">Edit</a> |
-                    <a href="" class="btn btn-danger btn-xs">Delete</a>
-                </td>
+                <td><a href="<?=__base_path__?>index/view/<?= $value->uuid ?>"><?= $value->uuid ?></a></td>
+                <td><?= $value->name ?></td>
+                <td><?= $value->lastName ?></td>
+                <td><?= $value->photo ?></td>
+                <td><?= $value->description ?></td>
             </tr>
 
         <?php

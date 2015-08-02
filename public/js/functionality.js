@@ -1,29 +1,60 @@
 $(document).ready(function () {
-    $('#createContactSuccess').hide();
-    $('#createContactError').hide();
+
+    //HIDING MASSAGES
+    $('#createSuccess').hide();
+    $('#createError').hide();
+
+    //CREATE CONTACT FUNCTIONALITY
     var createContact = $('#createContact');
-    createContact.submit(function (e) {
+    CreateItems(createContact);
+
+    //CREATE EMAIL FUNCTIONALITY
+    var createEmail = $('#createEmail');
+    CreateItems(createEmail);
+
+    //CREATE PHONE NUMBER FUNCTIONALITY
+    var createPhone = $('#createPhone');
+    CreateItems(createPhone);
+
+    //CREATE ADDRESS FUNCTIONALITY
+    var createAddress = $('#createAddress');
+    CreateItems(createAddress);
+
+    //UPDATE CONTACT FUNCTIONALITY
+    var updateContact = $('#updateContact');
+    CreateItems(updateContact);
+
+    //UPDATE EMAIL FUNCTIONALITY
+    //var updateContact = $('#updateContact');
+    //CreateItems(updateContact);
+
+});
+
+function CreateItems(clickedData){
+    clickedData.submit(function (e) {
         e.preventDefault();
         var data = $(this).serialize();
         var url = $(this).attr('action');
         $.post(url, {data: data}, "json")
             .done(function (data) {
+                console.log(data);
                 obj = JSON.parse(data);
-                if(obj.status) {
-                    $('#createContactSuccess').show();
-                    $('#createContactError').hide();
-                    $('#createContactSuccess').children('strong').text(obj.massage);
-                }else{
-                    $('#createContactSuccess').hide();
-                    $('#createContactError').show();
-                    $('#createContactError').children('strong').text(obj.massage);
+                if (obj.status) {
+                    window.location.href = window.location.origin + window.location.pathname + '?url=index/view/' + obj.uuid;
+                    $('#createSuccess').show();
+                    $('#createError').hide();
+                    $('#createSuccess').children('strong').text(obj.massage);
+                } else {
+                    $('#createSuccess').hide();
+                    $('#createError').show();
+                    $('#createError').children('strong').text(obj.massage);
                 }
             })
             .fail(function () {
                 alert("error");
             });
-    })
-});
+    });
+}
 
 /*
  $( document ).ready(function() {

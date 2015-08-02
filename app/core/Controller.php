@@ -10,7 +10,16 @@ class Controller {
     }
 
     protected function getParams(){
-        return $this->params = Redirect::parsUrl() ? array_values(Redirect::parsUrl()) : [];
+        if(Redirect::parsUrl()) {
+            $allURL = array_values(Redirect::parsUrl());
+            unset($allURL[0]); //controller
+            unset($allURL[1]); //method
+            $this->params = array_values($allURL);
+        }else{
+            $this->params = [];
+        }
+        return $this->params;
+
     }
 
 }
