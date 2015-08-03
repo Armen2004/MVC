@@ -3,6 +3,7 @@ $(document).ready(function () {
     //HIDING MASSAGES
     $('#createSuccess').hide();
     $('#createError').hide();
+    $('#searchResult').hide();
 
     //CREATE CONTACT FUNCTIONALITY
     var createContact = $('#createContact');
@@ -25,8 +26,25 @@ $(document).ready(function () {
     CreateItems(updateContact);
 
     //UPDATE EMAIL FUNCTIONALITY
-    //var updateContact = $('#updateContact');
-    //CreateItems(updateContact);
+    var updateEmail = $('#updateEmail');
+    CreateItems(updateEmail);
+
+    //UPDATE PHONE NUMBER FUNCTIONALITY
+    var updatePhone = $('#updatePhone');
+    CreateItems(updatePhone);
+
+    //UPDATE ADDRESS FUNCTIONALITY
+    var updateAddress = $('#updateAddress');
+    CreateItems(updateAddress);
+
+    //Delete FUNCTIONALITY
+    var deleteData = $('.deleteData');
+    deleteData.each(function(){
+        DeleteItem($(this));
+    });
+
+    var searchData = $('#searchData');
+    SearchItem(searchData);
 
 });
 
@@ -44,6 +62,73 @@ function CreateItems(clickedData){
                     $('#createSuccess').show();
                     $('#createError').hide();
                     $('#createSuccess').children('strong').text(obj.massage);
+                } else {
+                    $('#createSuccess').hide();
+                    $('#createError').show();
+                    $('#createError').children('strong').text(obj.massage);
+                }
+            })
+            .fail(function () {
+                alert("error");
+            });
+    });
+}
+
+function DeleteItem(clickedData){
+    clickedData.click(function(e){
+        e.preventDefault();
+        var table = $(this).attr('data-table');
+        var id = $(this).attr('data-id');
+        var url = $(this).attr('data-url');
+        var uuid = $(this).attr('data-uuid');
+        var data = [];
+        data["table"] = table;
+        data["id"] = id;
+        $.post(url, {id: id, table: table }, "json")
+            .done(function (data) {
+                console.log(data);
+                obj = JSON.parse(data);
+                console.log(obj);
+                if (obj.status) {
+                    if(table == 'contacts') {
+                        window.location.href = window.location.origin + window.location.pathname + '?url=index/index/';
+                    }else{
+                        window.location.href = window.location.origin + window.location.pathname + '?url=index/view/' + uuid;
+                    }
+                    $('#createSuccess').show();
+                    $('#createError').hide();
+                    $('#createSuccess').children('strong').text(obj.massage);
+                } else {
+                    $('#createSuccess').hide();
+                    $('#createError').show();
+                    $('#createError').children('strong').text(obj.massage);
+                }
+            })
+            .fail(function () {
+                alert("error");
+            });
+    });
+}
+
+function SearchItem(clickedData){
+    clickedData.submit(function (e) {
+        e.preventDefault();
+        var data = $(this).serialize();
+        var table = $('#selectedField :selected').attr('data-table');
+        var url = $(this).attr('action');
+        $.post(url, {data: data, table: table}, "json")
+            .done(function (data) {
+                obj = JSON.parse(data);
+                //console.log(obj);
+                if (obj.status) {
+                    $('#createSuccess').show();
+                    $('#createError').hide();
+                    $('#createSuccess').children('strong').text(obj.massage);
+                    var result = JSON.parse(obj.result);
+                    for(var i = 0; i < result.length; i++){
+                        console.log(result[i]);
+                    }
+                    //$('tbody').append('<tr><td><a href=""><?= $value->uuid ?></a></td><td><?= $value->name ?></td><td><?= $value->lastName ?></td><td><?= $value->photo ?></td><td><?= $value->description ?></td></tr>')
                 } else {
                     $('#createSuccess').hide();
                     $('#createError').show();

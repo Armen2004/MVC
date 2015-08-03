@@ -31,8 +31,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li class="<?=(($data['URL'] == 'index/index' || $data['URL'] == '') ? 'active' : '') ?>"><a href="<?=__base_path__?>index/index"><span></span>Home</a></li>
-                <li class="<?=$data['URL'] == 'index/createContact' ? 'active' : '' ?>"><a href="<?=__base_path__?>index/createContact">Create Contact</a></li>
-                <li class="<?=$data['URL'] == 'index/search' ? 'active' : '' ?>"><a href="<?=__base_path__?>index/search">Search</a></li>
+                <li class="<?=$data['URL'] == 'search/index' ? 'active' : '' ?>"><a href="<?=__base_path__?>search/index">Search</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

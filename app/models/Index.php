@@ -129,7 +129,96 @@ class Index_Model extends Model
             $this->db->exec($sql);
             $data = [
                 'status' => TRUE,
-                'massage' => 'Contact Created Successfully.'
+                'massage' => 'Contact Updated Successfully.'
+            ];
+            return $data;
+        } catch (PDOException $e) {
+            $data = [
+                'status' => FALSE,
+                'massage' => $e->getMessage()
+            ];
+            return $data;
+        }
+    }
+
+    public function updateEmail($id, array $data)
+    {
+        $row = "emails='" . htmlentities(stripslashes($data['emails'])) . "'";
+
+        $sql = "UPDATE emails SET " . $row . " WHERE id='". $id ."'; ";
+        try {
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
+            $this->db->exec($sql);
+            $data = [
+                'status' => TRUE,
+                'massage' => 'Email Updated Successfully.'
+            ];
+            return $data;
+        } catch (PDOException $e) {
+            $data = [
+                'status' => FALSE,
+                'massage' => $e->getMessage()
+            ];
+            return $data;
+        }
+    }
+
+    public function updatePhone($id, array $data)
+    {
+        $row = "numbers='" . htmlentities(stripslashes($data['phones'])) . "'";
+
+        $sql = "UPDATE phonenumbers SET " . $row . " WHERE id='". $id ."'; ";
+        try {
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
+            $this->db->exec($sql);
+            $data = [
+                'status' => TRUE,
+                'massage' => 'Phone Number Updated Successfully.'
+            ];
+            return $data;
+        } catch (PDOException $e) {
+            $data = [
+                'status' => FALSE,
+                'massage' => $e->getMessage()
+            ];
+            return $data;
+        }
+    }
+
+    public function updateAddress($id, array $data)
+    {
+        $str = "";
+        foreach ($data as $key => $val) {
+            $str .= htmlentities(stripslashes($key)) . "='" . htmlentities(stripslashes($val)) . "', ";
+        }
+        $str = rtrim($str, " ,");
+        $sql = "UPDATE addersses SET " . $str . " WHERE id='". $id ."'; ";
+        try {
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
+            $this->db->exec($sql);
+            $data = [
+                'status' => TRUE,
+                'massage' => 'Phone Number Updated Successfully.'
+            ];
+            return $data;
+        } catch (PDOException $e) {
+            $data = [
+                'status' => FALSE,
+                'massage' => $e->getMessage()
+            ];
+            return $data;
+        }
+    }
+
+    public function deleteData($id, $tableName){
+        try {
+            $sql = "DELETE FROM " . $tableName . " WHERE id=:ID";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':ID', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $data = [
+                'status' => TRUE,
+                'massage' => 'Data Deleted Successfully.'
             ];
             return $data;
         } catch (PDOException $e) {
@@ -148,29 +237,50 @@ class Index_Model extends Model
         return json_encode($result);
     }
 
-    public function getContactById($uuid){
-        $sth = $this->db->prepare("SELECT * FROM contacts WHERE uuid='".$uuid."'");
+    public function getContactByUUID($uuid){
+        $sth = $this->db->prepare("SELECT * FROM contacts WHERE uuid='".$uuid."' ORDER BY id DESC");
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
         return json_encode($result);
     }
 
-    public function getEmailById($uuid){
-        $sth = $this->db->prepare("SELECT * FROM emails WHERE uuid='".$uuid."'");
+    public function getEmailByUUID($uuid){
+        $sth = $this->db->prepare("SELECT * FROM emails WHERE uuid='".$uuid."' ORDER BY id DESC");
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
         return json_encode($result);
     }
 
-    public function getPhoneById($uuid){
-        $sth = $this->db->prepare("SELECT * FROM phonenumbers WHERE uuid='".$uuid."'");
+    public function getEmailById($id){
+        $sth = $this->db->prepare("SELECT * FROM emails WHERE id='".$id."'");
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
         return json_encode($result);
     }
 
-    public function getAddressById($uuid){
-        $sth = $this->db->prepare("SELECT * FROM addersses WHERE uuid='".$uuid."'");
+    public function getPhoneByUUID($uuid){
+        $sth = $this->db->prepare("SELECT * FROM phonenumbers WHERE uuid='".$uuid."' ORDER BY id DESC");
+        $sth->execute();
+        $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+        return json_encode($result);
+    }
+
+    public function getPhoneById($id){
+        $sth = $this->db->prepare("SELECT * FROM phonenumbers WHERE id='".$id."'");
+        $sth->execute();
+        $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+        return json_encode($result);
+    }
+
+    public function getAddressByUUID($uuid){
+        $sth = $this->db->prepare("SELECT * FROM addersses WHERE uuid='".$uuid."' ORDER BY id DESC");
+        $sth->execute();
+        $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+        return json_encode($result);
+    }
+
+    public function getAddressById($id){
+        $sth = $this->db->prepare("SELECT * FROM addersses WHERE id='".$id."'");
         $sth->execute();
         $result = $sth->fetchAll(PDO::FETCH_ASSOC);
         return json_encode($result);

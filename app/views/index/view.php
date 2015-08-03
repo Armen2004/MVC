@@ -1,7 +1,8 @@
+<h1 class="text-center"><?= $data['title'] ?></h1>
 <div class="pull-right">
-<a href="<?=__base_path__?>index/createEmail/<?= $data['uuid'] ?>" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span> Email</a> |
-<a href="<?=__base_path__?>index/createPhone/<?= $data['uuid'] ?>" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span> Phone Numbers</a> |
-<a href="<?=__base_path__?>index/createAddress/<?= $data['uuid'] ?>" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span> Addresses</a>
+    <a href="<?=__base_path__?>index/createEmail/<?= $data['uuid'] ?>" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span> Email</a> |
+    <a href="<?=__base_path__?>index/createPhone/<?= $data['uuid'] ?>" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span> Phone Numbers</a> |
+    <a href="<?=__base_path__?>index/createAddress/<?= $data['uuid'] ?>" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span> Addresses</a>
 </div>
 <div class="clearfix"></div>
 <hr>
@@ -30,7 +31,7 @@
                 <td><?= $value->description ?></td>
                 <td width="110px">
                     <a href="<?=__base_path__?>index/editContactInfo/<?= $value->uuid ?>" class="btn btn-warning btn-xs">Edit</a> |
-                    <a href="" class="btn btn-danger btn-xs">Delete</a>
+                    <a href="" class="btn btn-danger btn-xs deleteData" data-table="contacts" data-id="<?= $value->id ?>" data-url="<?=__base_path__?>index/deleteData/<?= $value->id ?>" data-uuid="<?= $value->uuid ?>">Delete</a>
                 </td>
             </tr>
 
@@ -54,16 +55,16 @@
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="email">
             <h1>Emails</h1>
-                <span class="pull-right">
-                    <a href="<?=__base_path__?>index/editEmail/<?= $value->uuid ?>" class="btn btn-warning btn-xs">Edit</a> |
-                    <a href="" class="btn btn-danger btn-xs">Delete</a>
-                </span>
             <?php
             $i = 1;
             foreach ($data['email'] as $key => $value):
                 ?>
                 <p>
                     <strong>Email <?=$i?> : </strong><?= $value->emails ?>
+                    <span class="pull-right">
+                        <a href="<?=__base_path__?>index/editEmail/<?= $value->id ?>" class="btn btn-warning btn-xs">Edit</a> |
+                        <a href="" class="btn btn-danger btn-xs deleteData" data-table="emails" data-id="<?= $value->id ?>" data-url="<?=__base_path__?>index/deleteData/<?= $value->id ?>" data-uuid="<?= $value->uuid ?>">Delete</a>
+                    </span>
                 </p>
             <?php
             $i++;
@@ -71,6 +72,7 @@
             ?>
         </div>
         <div role="tabpanel" class="tab-pane" id="phone">
+            <h1>Phone Numbers</h1>
             <?php
             $i = 1;
             foreach ($data['phone'] as $key => $value):
@@ -78,8 +80,8 @@
                 <p>
                     <strong>Number <?=$i?> : </strong><?= $value->numbers ?>
                     <span class="pull-right">
-                        <a href="<?=__base_path__?>index/editPhone/<?= $value->uuid ?>" class="btn btn-warning btn-xs">Edit</a> |
-                        <a href="" class="btn btn-danger btn-xs">Delete</a>
+                        <a href="<?=__base_path__?>index/editPhone/<?= $value->id ?>" class="btn btn-warning btn-xs">Edit</a> |
+                        <a href="" class="btn btn-danger btn-xs deleteData" data-table="phonenumbers" data-id="<?= $value->id ?>" data-url="<?=__base_path__?>index/deleteData/<?= $value->id ?>" data-uuid="<?= $value->uuid ?>">Delete</a>
                     </span>
                 </p>
             <?php
@@ -88,6 +90,7 @@
             ?>
         </div>
         <div role="tabpanel" class="tab-pane" id="address">
+            <h1>Addresses</h1>
             <?php
             $i = 1;
             foreach ($data['address'] as $key => $value):
@@ -95,8 +98,8 @@
                 <p>
                     <strong>Address </strong> <?=$i?> :
                     <span class="pull-right">
-                        <a href="<?=__base_path__?>index/editAddress/<?= $value->uuid ?>" class="btn btn-warning btn-xs">Edit</a> |
-                        <a href="" class="btn btn-danger btn-xs">Delete</a>
+                        <a href="<?=__base_path__?>index/editAddress/<?= $value->id ?>" class="btn btn-warning btn-xs">Edit</a> |
+                        <a href="" class="btn btn-danger btn-xs deleteData" data-table="addersses" data-id="<?= $value->id ?>" data-url="<?=__base_path__?>index/deleteData/<?= $value->id ?>" data-uuid="<?= $value->uuid ?>">Delete</a>
                     </span>
                 </p>
                 <p><strong>Name : </strong><?= $value->name ?></p>

@@ -29,19 +29,13 @@ class IndexController extends Controller{
         View::make('index/contact/create-contact', $data);
     }
 
-    public function search(){
-        $data = array(
-            'URL' => $this->url
-        );
-        View::make('index/search', $data);
-    }
-
     public function view(){
-        $contacts = $this->model->getContactById($this->params[0]);
-        $email = $this->model->getEmailById($this->params[0]);
-        $phone = $this->model->getPhoneById($this->params[0]);
-        $address = $this->model->getAddressById($this->params[0]);
+        $contacts = $this->model->getContactByUUID($this->params[0]);
+        $email = $this->model->getEmailByUUID($this->params[0]);
+        $phone = $this->model->getPhoneByUUID($this->params[0]);
+        $address = $this->model->getAddressByUUID($this->params[0]);
         $data = array(
+            'title' => 'View',
             'contacts' => json_decode($contacts),
             'email' => json_decode($email),
             'phone' => json_decode($phone),
@@ -49,7 +43,7 @@ class IndexController extends Controller{
             'uuid' => $this->params[0],
             'URL' => $this->url
         );
-        View::make('index/contact/view', $data);
+        View::make('index/view', $data);
     }
 
     public function createContactInfo(){
@@ -60,9 +54,9 @@ class IndexController extends Controller{
             return false;
         }
         parse_str($_POST['data'], $data);
-        if(!$data['uuid']){
+        if(!$data['uuid'] || !$data['photo'] || !$data['name'] || !$data['lastName'] || !$data['description']){
             echo json_encode([
-                'massage' => 'UUID Can\'t Be Empty.' ,
+                'massage' => 'Required Fields Can\'t Be Empty.' ,
                 'status' => false
             ]);
             return;
@@ -171,7 +165,7 @@ class IndexController extends Controller{
     public function editContactInfo(){
         $id = $this->params[0];
         if(!$_POST) {
-            $contacts = $this->model->getContactById($this->params[0]);
+            $contacts = $this->model->getContactByUUID($this->params[0]);
             $data = array(
                 'URL' => $this->url,
                 'contacts' => json_decode($contacts),
@@ -180,9 +174,9 @@ class IndexController extends Controller{
             View::make('index/contact/edit-contact', $data);
         }else{
             parse_str($_POST['data'], $data);
-            if(!$data['uuid']){
+            if(!$data['uuid'] || !$data['photo'] || !$data['name'] || !$data['lastName'] || !$data['description']){
                 echo json_encode([
-                    'massage' => 'UUID Can\'t Be Empty.' ,
+                    'massage' => 'Required Fields Can\'t Be Empty.' ,
                     'status' => false
                 ]);
                 return;
@@ -200,38 +194,101 @@ class IndexController extends Controller{
 
     public function editEmail(){
         $id = $this->params[0];
+        $email = $this->model->getEmailById($this->params[0]);
         if(!$_POST) {
-            $email = $this->model->getEmailById($this->params[0]);
-            $emails = json_decode($email);
-            $str = '';
-            foreach($emails as $key => $val){
-                $str .=$val->emails . "; ";
-            }
-            $str = rtrim($str, '; ');
             $data = array(
                 'URL' => $this->url,
-                'email' => $str,
-                'uuid' => $id
+                'email' => json_decode($email)
             );
             View::make('index/email/edit-email', $data);
         }else{
+            $uuid = json_decode($email);
             parse_str($_POST['data'], $data);
-            if(!$data['uuid']){
+            if(!filter_var(trim($data['emails']), FILTER_VALIDATE_EMAIL)){
                 echo json_encode([
-                    'massage' => 'UUID Can\'t Be Empty.' ,
+                    'massage' => 'You write Wrong Email(s).' ,
                     'status' => false
                 ]);
                 return;
             }
-            unset($data['uuid']);
-            $query = $this->model->updateContactInfo($id, $data);
+            $query = $this->model->updateEmail($id, $data);
             $data = json_encode([
-                'uuid' => $id,
+                'uuid' => $uuid[0]->uuid,
                 'massage' => $query['massage'],
                 'status' => $query['status']
             ]);
             print_r($data);
         }
+    }
+
+    public function editPhone(){
+        $id = $this->params[0];
+        $phone = $this->model->getPhoneById($this->params[0]);
+        if(!$_POST) {
+            $data = array(
+                'URL' => $this->url,
+                'phone' => json_decode($phone)
+            );
+            View::make('index/phone/edit-phone', $data);
+        }else{
+            $uuid = json_decode($phone);
+            parse_str($_POST['data'], $data);
+            if(!$data['phones']){
+                echo json_encode([
+                    'massage' => 'Phone Number Can\'t Be Empty.' ,
+                    'status' => false
+                ]);
+                return;
+            }
+            $query = $this->model->updatePhone($id, $data);
+            $data = json_encode([
+                'uuid' => $uuid[0]->uuid,
+                'massage' => $query['massage'],
+                'status' => $query['status']
+            ]);
+            print_r($data);
+        }
+    }
+
+    public function editAddress(){
+        $id = $this->params[0];
+        $address = $this->model->getAddressById($this->params[0]);
+        if(!$_POST) {
+            $data = array(
+                'URL' => $this->url,
+                'address' => json_decode($address)
+            );
+            View::make('index/address/edit-address', $data);
+        }else{
+            $uuid = json_decode($address);
+            parse_str($_POST['data'], $data);
+            if(!$data['name'] || !$data['city'] || !$data['latitude'] || !$data['longitude']){
+                echo json_encode([
+                    'massage' => 'Required Fields Can\'t Be Empty.' ,
+                    'status' => false
+                ]);
+                return;
+            }
+            $query = $this->model->updateAddress($id, $data);
+            $data = json_encode([
+                'uuid' => $uuid[0]->uuid,
+                'massage' => $query['massage'],
+                'status' => $query['status']
+            ]);
+            print_r($data);
+        }
+    }
+
+    public function deleteData(){
+        $id = (int) htmlentities(stripslashes($_POST['id']));
+        $tableName = (string) htmlentities(stripslashes($_POST['table']));
+
+        $query = $this->model->deleteData($id, $tableName);
+        $data = json_encode([
+            'massage' => $query['massage'],
+            'status' => $query['status']
+        ]);
+        print_r($data);
     }
 
     public function __destruct(){

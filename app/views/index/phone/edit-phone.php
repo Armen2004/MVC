@@ -10,14 +10,17 @@
     </button>
     <strong></strong>
 </p>
-<form class="form-group col-lg-6" id="updateEmail" action="<?=__base_path__?>index/editEmail/<?=$data['email'][0]->id?>">
+<?php
+print_r($data['phone']);
+?>
+<form class="form-group col-lg-6" id="updatePhone" action="<?=__base_path__?>index/editPhone/<?=$data['phone'][0]->id?>">
     <div class="form-group">
         <div class="form-group">
             <label>
-                Email
+                Phone Number<span style="color: red">*</span>
             </label>
-            <input type="text" name="emails" class="form-control" placeholder="Email" value="<?=$data['email'][0]->emails?>">
-            <p class="help-block">Example example@example.com.</p>
+            <input type="text" name="phones" class="form-control" placeholder="Phone Number" value="<?=$data['phone'][0]->numbers?>">
+            <p class="help-block">Example 000 00 00-00-00.</p>
         </div>
-    <input type="submit" value="update email" class="btn btn-block btn-primary text-uppercase">
+        <input type="submit" value="update phone number" class="btn btn-block btn-primary text-uppercase">
 </form>

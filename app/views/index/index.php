@@ -1,5 +1,8 @@
-<?= $data['title'] ?>
-<br>
+<h1 class="text-center"><?= $data['title'] ?></h1>
+<div class="pull-right">
+    <a href="<?=__base_path__?>index/createContact" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Create Contact</a>
+</div>
+<div class="clearfix"></div>
 
 <div class="table-responsive">
     <table class="table">
