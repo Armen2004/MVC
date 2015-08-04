@@ -25,7 +25,6 @@ class Install_Model extends Model {
     public function createNewTable($sql) {
         $this->db->query("USE " . DB_DATABASE);
         try {
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
             $this->db->exec($sql);
             Session::set('massage-table', 'Table Created Successfully.');
         } catch (PDOException $e) {
@@ -51,7 +50,6 @@ class Install_Model extends Model {
             $vals = rtrim($vals, " ,");
             $sql = "INSERT INTO contacts (" . $keys . ") VALUES (" . $vals . ")";
             try {
-                $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
                 $this->db->exec($sql);
                 $data = [
                     'status' => TRUE,
@@ -84,7 +82,6 @@ class Install_Model extends Model {
                 }
             }
             try {
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
             $this->db->exec($sql);
                 $data = [
                     'status' => TRUE,
@@ -117,7 +114,6 @@ class Install_Model extends Model {
             $vals = rtrim($vals, " ,");
             $sql = "INSERT INTO " . $tableName . " (uuid, " . $keys . ") VALUES ('" . $id . "', " . $vals . "); ";
             try {
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
             $this->db->exec($sql);
                 $data = [
                     'status' => TRUE,

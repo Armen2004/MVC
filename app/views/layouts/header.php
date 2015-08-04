@@ -32,6 +32,7 @@
             <ul class="nav navbar-nav">
                 <li class="<?=(($data['URL'] == 'index/index' || $data['URL'] == '') ? 'active' : '') ?>"><a href="<?=__base_path__?>index/index"><span></span>Home</a></li>
                 <li class="<?=$data['URL'] == 'search/index' ? 'active' : '' ?>"><a href="<?=__base_path__?>search/index">Search</a></li>
+                <li class="<?=$data['URL'] == 'contact/index' ? 'active' : '' ?>"><a href="<?=__base_path__?>contact/index">Contact Form</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

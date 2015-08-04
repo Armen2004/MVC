@@ -21,7 +21,6 @@ class Index_Model extends Model
         $value = rtrim($value, " ,");
         $sql = "INSERT INTO contacts (" . $keys . ") VALUES (" . $value . "); ";
         try {
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
             $this->db->exec($sql);
             $data = [
                 'status' => TRUE,
@@ -46,7 +45,6 @@ class Index_Model extends Model
             $sql .= "INSERT INTO emails (uuid, emails) VALUES ('" . $id . "','" . $values . "'); ";
         }
         try {
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
             $this->db->exec($sql);
             $data = [
                 'status' => TRUE,
@@ -71,7 +69,6 @@ class Index_Model extends Model
             $sql .= "INSERT INTO phonenumbers (uuid, numbers) VALUES ('" . $id . "','" . $values . "'); ";
         }
         try {
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
             $this->db->exec($sql);
             $data = [
                 'status' => TRUE,
@@ -99,7 +96,6 @@ class Index_Model extends Model
         $value = rtrim($value, " ,");
         $sql = "INSERT INTO addersses (uuid, " . $keys . ") VALUES ('" . $id . "', " . $value . "); ";
         try {
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
             $this->db->exec($sql);
             $data = [
                 'status' => TRUE,
@@ -125,7 +121,6 @@ class Index_Model extends Model
         $str = rtrim($str, " ,");
         $sql = "UPDATE contacts SET " . $str . " WHERE uuid='". $id ."'; ";
         try {
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
             $this->db->exec($sql);
             $data = [
                 'status' => TRUE,
@@ -147,7 +142,6 @@ class Index_Model extends Model
 
         $sql = "UPDATE emails SET " . $row . " WHERE id='". $id ."'; ";
         try {
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
             $this->db->exec($sql);
             $data = [
                 'status' => TRUE,
@@ -169,7 +163,6 @@ class Index_Model extends Model
 
         $sql = "UPDATE phonenumbers SET " . $row . " WHERE id='". $id ."'; ";
         try {
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
             $this->db->exec($sql);
             $data = [
                 'status' => TRUE,
@@ -194,7 +187,6 @@ class Index_Model extends Model
         $str = rtrim($str, " ,");
         $sql = "UPDATE addersses SET " . $str . " WHERE id='". $id ."'; ";
         try {
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
             $this->db->exec($sql);
             $data = [
                 'status' => TRUE,

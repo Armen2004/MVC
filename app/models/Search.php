@@ -27,9 +27,8 @@ class Search_Model extends Model
 
     public function search(array $data){
 
-        $sql = "SELECT * FROM " . $data['table'] . " WHERE " . $data['field'] . " LIKE '%" . $data['search'] . "'";
+        $sql = "SELECT * FROM " . $data['table'] . " WHERE " . $data['field'] . " LIKE '%" . $data['search'] . "%'";
         try {
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //Error Handling
             $q = $this->db->prepare($sql);
             $q->execute();
             $data = $q->fetchAll(PDO::FETCH_ASSOC);

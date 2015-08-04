@@ -10,9 +10,6 @@
     </button>
     <strong></strong>
 </p>
-<?php
-print_r($data['phone']);
-?>
 <form class="form-group col-lg-6" id="updatePhone" action="<?=__base_path__?>index/editPhone/<?=$data['phone'][0]->id?>">
     <div class="form-group">
         <div class="form-group">

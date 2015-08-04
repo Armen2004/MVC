@@ -39,19 +39,7 @@
         <input type="submit" value="search" class="btn btn-primary text-uppercase">
     </form>
 </div>
-<div class="table-responsive" id="searchResult">
-    <table class="table">
-        <thead>
-        <tr class="text-uppercase">
-            <th>uuid</th>
-            <th>name</th>
-            <th>lastName</th>
-            <th>photo</th>
-            <th>description</th>
-        </tr>
-        </thead>
-        <tbody>
-
-        </tbody>
-    </table>
+<hr>
+<div class="table-responsive">
+    <pre id="searchResult" class="pre-scrollable"></pre>
 </div>
